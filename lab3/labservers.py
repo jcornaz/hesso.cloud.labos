@@ -31,8 +31,10 @@ class RestClient(Server):
     def name(self):
         return 'RestClient'
 
-    def run(self, ip):
-        print("run with rest client mongo ip " + ip)
+    def run(self, mongo_server):
+        self.attach_public_ip('86.119.29.165')
+        super(RestClient, self).run("python restclient.py " + mongo_server.private_ip)
+        self.detach_public_ips()
 
 
 class RestServer(Server):
@@ -43,5 +45,6 @@ class RestServer(Server):
     def name(self):
         return 'RestServer'
 
-    def run(self, ip):
-        print("run with reset server mongo ip " + ip)
+    def run(self, mongo_server):
+        self.attach_public_ip('86.119.29.193')
+        super(RestServer, self).run("python restserver.py " + mongo_server.private_ip)

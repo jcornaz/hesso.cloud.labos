@@ -26,5 +26,5 @@ if __name__ == '__main__':
     with MongoDB(driver) as mongo:
         with RestClient(driver) as rest_client:
             with RestServer(driver) as rest_server:
-                rest_client.run(mongo.private_ip)
-                rest_server.run(mongo.private_ip)
+                rest_client.run(mongo)
+                rest_server.run(mongo)
