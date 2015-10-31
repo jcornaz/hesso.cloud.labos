@@ -13,6 +13,7 @@ if __name__ == '__main__':
     else:
         raise Exception("Not supported cloud provider : " + sys.argv[3])
 
+    print("create a driver...")
     driver = provider(
         sys.argv[1],
         sys.argv[2],
