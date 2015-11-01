@@ -69,7 +69,7 @@ class Server(object):
 
         ip = self._driver.wait_until_running([self._node], ssh_interface='public_ips')[0][1][0]
         print("connecting to " + ip)
-        ssh = ParamikoSSHClient(ip, 22, 'ubuntu', key_files=['/home/vagrant/labo/keypair.pem'])
+        ssh = ParamikoSSHClient(ip, 22, 'ubuntu', key_files=['./keypair.pem'])
         if ssh.connect():
             full_command = "nohup " + command + " </dev/null >logfile.log 2>&1 &"
             print("execute \"" + full_command + "\" on " + ip + "...")

@@ -2,29 +2,34 @@ import sys
 
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
-from labservers import MongoDB, RestClient, RestServer
+from labservers import Stack
+
+def create_switch_engine_driver(user, tenant, password):
+    print("creating a driver for SwtichEngine...")
+    return get_driver(Provider.OPENSTACK)(
+        user,
+        password,
+        ex_tenant_name=tenant,
+        ex_force_auth_url="https://keystone.cloud.switch.ch:5000/v2.0/tokens",
+        ex_force_auth_version='2.0_password',
+        ex_force_service_region="LS"
+    )
+
+
+def create_amazon_driver(user, tenant, password):
+    pass
 
 if __name__ == '__main__':
 
     if len(sys.argv) < 3:
         raise Exception("Not enough arguments")
     elif len(sys.argv) < 4 or sys.argv[3] == 'switch':
-        provider = get_driver(Provider.OPENSTACK)
+        driver = create_switch_engine_driver(sys.argv[1], sys.argv[1], sys.argv[2])
+        stack = Stack.load(driver, 'switch-engine-stack.yml')
+    elif sys.argv[3] == 'amazon':
+        driver = create_amazon_driver(sys.argv[1], sys.argv[2], sys.argv[1])
+        stack = Stack.load(driver, 'amazon-stack.yml')
     else:
         raise Exception("Not supported cloud provider : " + sys.argv[3])
 
-    print("create a driver...")
-    driver = provider(
-        sys.argv[1],
-        sys.argv[2],
-        ex_tenant_name=sys.argv[1],
-        ex_force_auth_url="https://keystone.cloud.switch.ch:5000/v2.0/tokens",
-        ex_force_auth_version='2.0_password',
-        ex_force_service_region="LS"
-    )
-
-    with MongoDB(driver) as mongo:
-        with RestClient(driver) as rest_client:
-            with RestServer(driver) as rest_server:
-                rest_client.run(mongo)
-                rest_server.run(mongo)
+    stack.run()
