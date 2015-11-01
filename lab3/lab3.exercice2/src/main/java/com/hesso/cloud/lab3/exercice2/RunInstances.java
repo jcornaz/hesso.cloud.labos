@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.hesso.cloud.lab3.exercice2;
 
 import java.io.File;
@@ -12,16 +7,10 @@ import org.jclouds.aws.ec2.compute.AWSEC2TemplateOptions;
 import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.ComputeServiceContext;
 import org.jclouds.compute.RunNodesException;
-import org.jclouds.compute.domain.ComputeMetadata;
 import org.jclouds.compute.domain.OsFamily;
 import org.jclouds.compute.domain.Template;
-import org.jclouds.compute.domain.TemplateBuilder;
 import org.jclouds.ec2.domain.InstanceType;
 
-/**
- *
- * @author jonathan
- */
 public class RunInstances {
 
     public static void main(String[] args) throws RunNodesException, IOException {
@@ -38,15 +27,25 @@ public class RunInstances {
                 .buildView(ComputeServiceContext.class)
                 .getComputeService();
 
-        System.out.println("Creating a template...");
-        TemplateBuilder builder = client.templateBuilder()
+        System.out.println("Build a template...");
+        Template template = client.templateBuilder()
                 .osFamily(OsFamily.UBUNTU)
                 .hardwareId(InstanceType.T2_MICRO)
                 .locationId("eu-central-1")
-                .options(AWSEC2TemplateOptions.Builder.keyPair("id_hesso_amazonws").inboundPorts(22, 80));
-        
-       Stack stack = Stack.load("../amazon-stack.yml", client);
-       
-       stack.run();
+                .options(AWSEC2TemplateOptions.Builder.keyPair("id_hesso_amazonws").inboundPorts(22, 80))
+                .build();
+
+        Stack stack = StackFileReader.load("../amazon-stack.yml", client, template);
+
+        System.out.println("Start instances ...");
+        stack.start();
+
+        char pressedChar;
+        do {
+            System.out.println("Press 'A' to abort : ");
+            pressedChar = (char) System.in.read();
+        } while (pressedChar != 'A');
+
+        stack.destroy();
     }
 }
