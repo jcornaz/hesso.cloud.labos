@@ -1,0 +1,17 @@
+key_pair: ./amazon.pem
+
+net_id: 'vpc-d5286cb0'
+
+mongodb:
+  size: 't1.micro'
+  image_id: 'ami-a46f7cc8'
+
+rest_client:
+  size: 't1.micro'
+  image_id: 'ami-fe6e7d92'
+  public_ip: '52.29.93.38'
+
+rest_server:
+  size: 't1.micro'
+  image_id: 'ami-bb6e7dd7'
+  public_ip: '52.29.39.73'

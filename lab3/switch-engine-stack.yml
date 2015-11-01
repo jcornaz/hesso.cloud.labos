@@ -1,3 +1,5 @@
+key_pair: ./switch-engine.pem
+
 net_id: '25620c4e-2c3b-4403-9f7d-dd1f0068f40c'
 
 mongodb:
