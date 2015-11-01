@@ -6,6 +6,7 @@
 package com.hesso.cloud.lab3.exercice2;
 
 import java.io.File;
+import java.io.IOException;
 import org.jclouds.ContextBuilder;
 import org.jclouds.aws.ec2.compute.AWSEC2TemplateOptions;
 import org.jclouds.compute.ComputeService;
@@ -14,6 +15,7 @@ import org.jclouds.compute.RunNodesException;
 import org.jclouds.compute.domain.ComputeMetadata;
 import org.jclouds.compute.domain.OsFamily;
 import org.jclouds.compute.domain.Template;
+import org.jclouds.compute.domain.TemplateBuilder;
 import org.jclouds.ec2.domain.InstanceType;
 
 /**
@@ -22,7 +24,7 @@ import org.jclouds.ec2.domain.InstanceType;
  */
 public class RunInstances {
 
-    public static void main(String[] args) throws RunNodesException {
+    public static void main(String[] args) throws RunNodesException, IOException {
 
         String keyPair = args[0];
         String identity = args[1];
@@ -37,16 +39,14 @@ public class RunInstances {
                 .getComputeService();
 
         System.out.println("Creating a template...");
-        Template template = client.templateBuilder()
+        TemplateBuilder builder = client.templateBuilder()
                 .osFamily(OsFamily.UBUNTU)
                 .hardwareId(InstanceType.T2_MICRO)
                 .locationId("eu-central-1")
-                .options(AWSEC2TemplateOptions.Builder.keyPair("id_hesso_amazonws").inboundPorts(22, 80))
-                .build();
+                .options(AWSEC2TemplateOptions.Builder.keyPair("id_hesso_amazonws").inboundPorts(22, 80));
         
-        System.out.println("Creating a node...");
-        client.createNodesInGroup("jcloud-group", 1, template);
-        
-        System.out.println("Done");
+       Stack stack = Stack.load("../amazon-stack.yml", client);
+       
+       stack.run();
     }
 }
