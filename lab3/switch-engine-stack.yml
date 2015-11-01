@@ -1,0 +1,17 @@
+key_pair: ./switch-engine.pem
+
+net_id: '25620c4e-2c3b-4403-9f7d-dd1f0068f40c'
+
+mongodb:
+  size: 'c1.small'
+  image_id: 'eca08949-4d4d-41ad-afeb-9e9cbeaf70fa'
+
+rest_client:
+  size: 'c1.micro'
+  image_id: '11d41ef3-6ebc-4457-800f-bf1fd2ce91bf'
+  public_ip: '86.119.29.165'
+
+rest_server:
+  size: 'c1.micro'
+  image_id: 'bafba318-249d-428b-8683-933fbfae62a0'
+  public_ip: '86.119.29.193'

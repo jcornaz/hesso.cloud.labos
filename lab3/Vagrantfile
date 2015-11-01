@@ -1,0 +1,14 @@
+Vagrant.configure(2) do |config|
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.box_check_update = true
+
+  config.vm.synced_folder ".", "/home/vagrant/labo"
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo apt-get update
+    sudo apt-get upgrade
+    sudo apt-get install -y python-pip
+    pip install -r /home/vagrant/labo/requirements.txt
+    echo "cd /home/vagrant/labo" >> ~/.bashrc
+  SHELL
+end

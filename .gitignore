@@ -5,6 +5,9 @@
 *.gz
 *.log
 
+# Python files
+*.pyc
+
 # LaTeX Files
 *.aux
 *.lof
