@@ -1,30 +1,32 @@
 package com.hesso.cloud.lab3.exercice2;
 
 import java.util.Set;
-import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.RunNodesException;
-import org.jclouds.compute.domain.Image;
-import org.jclouds.compute.domain.NodeMetadata;
-import org.jclouds.compute.domain.Template;
 
-public abstract class Server extends Thread {
+public abstract class Server {
 
-    private final Image image;
-    private final ComputeService client;
-    private final Template template;
-    private Set<? extends NodeMetadata> meta;
+    private final String imageID;
+    private final CloudProvider provider;
+    CloudNode node;
+    private String name;
 
-    public Server(ComputeService client, Template template, Image image) {
-        this.client = client;
-        this.template = template;
-        this.image = image;
+    public Server(CloudProvider provider, String imageID) {
+        this.provider = provider;
+        this.imageID = imageID;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public String getName() {
+        return this.name;
     }
 
-    @Override
     public synchronized void run() {
         try {
             System.out.println("Instanciating " + this.getName() + " ...");
-            this.meta = this.client.createNodesInGroup(this.getName(), 1, this.template);
+            this.node = this.provider.createNode(this.imageID, this.getName());
             System.out.println("instanciated" + this.getName());
 
             this.afterInstanciation();
@@ -33,35 +35,45 @@ public abstract class Server extends Thread {
         }
     }
 
-    public synchronized void destroy() {
+    public synchronized void end() {
+        new Thread(() -> {
+                System.out.println("Destroying " + Server.this.getName() + ") ...");
+                this.node.destroy();
+            System.out.println(Server.this.getName() + " destroyed");
+        }).start();
+    }
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (NodeMetadata metadata : Server.this.meta) {
-                    System.out.println("Destroying " + metadata.getId() + " (" + Server.this.getName() + ") ...");
-                    Server.this.client.destroyNode(metadata.getId());
-                }
-                System.out.println(Server.this.getName() + " destroyed");
+    public synchronized String getPrivateIP() {
+        System.out.println(this.getName() + " is waiting for an ip address...");
+        Set<String> addresses = this.node.getPrivateAddresses();
+                
+        while(addresses.isEmpty())
+        {
+            try {
+                this.wait(1000);
+            } catch (InterruptedException ex) {
+                break;
             }
+            
+            addresses = this.node.getPrivateAddresses();
         }
-        ).start();
+        
+        return addresses.iterator().next();
     }
 
-    public String getPrivateIP() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void execute(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void execute(String command) {
+        System.out.println("execute \"nohup + command + \" </dev/null >logfile.log 2>&1 &\" on " + this.getName());
+        this.node.execute( "nohup " + command + " </dev/null >logfile.log 2>&1 &");
     }
 
     public void attachPublicIP(String publicIP) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        System.out.println( "Attaching " + publicIP + " to " + this.getName());
+        this.node.attachPublicIP(publicIP);
     }
 
     public void detachPublicIPs() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        System.out.println("Detaching ips from " + this.getName());
+        this.node.getPublicAddresses().forEach((ip) -> this.node.detachPublicIP(ip));
     }
 
     protected abstract void afterInstanciation();

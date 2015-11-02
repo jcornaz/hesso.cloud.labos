@@ -1,16 +1,12 @@
 package com.hesso.cloud.lab3.exercice2;
 
-import org.jclouds.compute.ComputeService;
-import org.jclouds.compute.domain.Image;
-import org.jclouds.compute.domain.Template;
-
 public class RESTClient extends Server {
 
     private MongoDB mongo;
     private final String publicIP;
 
-    RESTClient(ComputeService client, Template template, Image image, String publicIP) {
-        super(client, template, image);
+    RESTClient(CloudProvider provider, String imageID, String publicIP) {
+        super(provider, imageID);
         this.setName("RESTCLient");
         this.publicIP = publicIP;
     }

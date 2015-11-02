@@ -1,14 +1,10 @@
 
 package com.hesso.cloud.lab3.exercice2;
 
-import org.jclouds.compute.ComputeService;
-import org.jclouds.compute.domain.Image;
-import org.jclouds.compute.domain.Template;
-
 public class MongoDB extends Server {
 
-    MongoDB(ComputeService client, Template template, Image image) {
-        super(client, template, image);
+    MongoDB(CloudProvider provider, String imageID) {
+        super(provider, imageID);
         this.setName("MongoDB");
     }
 

@@ -1,16 +1,12 @@
 package com.hesso.cloud.lab3.exercice2;
 
-import org.jclouds.compute.ComputeService;
-import org.jclouds.compute.domain.Image;
-import org.jclouds.compute.domain.Template;
-
 public class RESTServer extends Server {
 
     private MongoDB mongo;
     private final String publicIP;
 
-    RESTServer(ComputeService client, Template template, Image image, String publicIP) {
-        super(client, template, image);
+    RESTServer(CloudProvider provider, String imageID, String publicIP) {
+        super(provider, imageID);
         this.setName("RESTServer");
         this.publicIP = publicIP;
     }
@@ -21,6 +17,7 @@ public class RESTServer extends Server {
 
     @Override
     protected void afterInstanciation() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.attachPublicIP(this.publicIP);
+        this.execute("python restserver.py " + this.mongo.getPrivateIP());
     }
 }

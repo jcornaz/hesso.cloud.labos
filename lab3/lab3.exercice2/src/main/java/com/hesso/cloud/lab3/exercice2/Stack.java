@@ -1,6 +1,6 @@
 package com.hesso.cloud.lab3.exercice2;
 
-public class Stack extends Thread {
+public class Stack {
     
     private final MongoDB mongo;
     private final RESTClient restClient;
@@ -15,16 +15,15 @@ public class Stack extends Thread {
         this.restServer.setMongo(this.mongo);
     }
 
-    @Override
     public void run() {
-        this.mongo.start();
-        this.restClient.start();
-        this.restServer.start();
+        this.mongo.run();
+        this.restClient.run();
+        this.restServer.run();
     }
     
-    public void destroy() {
-        this.restServer.destroy();
-        this.restClient.destroy();
-        this.mongo.destroy();
+    public void end() {
+        this.restServer.end();
+        this.restClient.end();
+        this.mongo.end();
     }
 }
