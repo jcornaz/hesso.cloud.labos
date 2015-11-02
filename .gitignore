@@ -5,6 +5,9 @@
 *.gz
 *.log
 
+# Maven folder
+target/
+
 # Python files
 *.pyc
 
