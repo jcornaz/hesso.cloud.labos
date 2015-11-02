@@ -1,5 +1,9 @@
 package com.hesso.cloud.lab3.exercice2;
 
+import com.hesso.cloud.lab3.exercice2.model.MongoDB;
+import com.hesso.cloud.lab3.exercice2.model.RESTServer;
+import com.hesso.cloud.lab3.exercice2.model.Stack;
+import com.hesso.cloud.lab3.exercice2.model.RESTClient;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;

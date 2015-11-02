@@ -1,5 +1,6 @@
-package com.hesso.cloud.lab3.exercice2;
+package com.hesso.cloud.lab3.exercice2.amazon;
 
+import com.hesso.cloud.lab3.exercice2.CloudNode;
 import java.util.Set;
 import org.jclouds.aws.ec2.AWSEC2Api;
 import org.jclouds.compute.ComputeService;

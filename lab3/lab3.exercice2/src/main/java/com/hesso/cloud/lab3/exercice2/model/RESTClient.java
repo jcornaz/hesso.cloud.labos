@@ -1,17 +1,19 @@
-package com.hesso.cloud.lab3.exercice2;
+package com.hesso.cloud.lab3.exercice2.model;
+
+import com.hesso.cloud.lab3.exercice2.CloudProvider;
 
 public class RESTClient extends Server {
 
     private MongoDB mongo;
     private final String publicIP;
 
-    RESTClient(CloudProvider provider, String imageID, String publicIP) {
+    public RESTClient(CloudProvider provider, String imageID, String publicIP) {
         super(provider, imageID);
         this.setName("RESTCLient");
         this.publicIP = publicIP;
     }
 
-    void setMongo(MongoDB mongo) {
+    public void setMongo(MongoDB mongo) {
         this.mongo = mongo;
     }
 

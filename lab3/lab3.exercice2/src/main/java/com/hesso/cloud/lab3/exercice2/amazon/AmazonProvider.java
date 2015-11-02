@@ -1,5 +1,7 @@
-package com.hesso.cloud.lab3.exercice2;
+package com.hesso.cloud.lab3.exercice2.amazon;
 
+import com.hesso.cloud.lab3.exercice2.CloudNode;
+import com.hesso.cloud.lab3.exercice2.CloudProvider;
 import java.util.Collection;
 import org.jclouds.ContextBuilder;
 import org.jclouds.aws.ec2.AWSEC2Api;
@@ -14,7 +16,7 @@ import org.jclouds.compute.domain.Template;
 import org.jclouds.compute.domain.TemplateBuilder;
 import org.jclouds.ec2.domain.InstanceType;
 
-class AmazonProvider implements CloudProvider {
+public class AmazonProvider implements CloudProvider {
     private ComputeService client;
     private TemplateBuilder templateBuilder;
     private final AWSEC2Api api;

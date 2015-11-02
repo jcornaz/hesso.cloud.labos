@@ -1,4 +1,4 @@
-package com.hesso.cloud.lab3.exercice2;
+package com.hesso.cloud.lab3.exercice2.model;
 
 public class Stack {
     

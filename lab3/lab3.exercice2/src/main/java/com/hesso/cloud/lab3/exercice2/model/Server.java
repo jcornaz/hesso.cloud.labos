@@ -1,5 +1,7 @@
-package com.hesso.cloud.lab3.exercice2;
+package com.hesso.cloud.lab3.exercice2.model;
 
+import com.hesso.cloud.lab3.exercice2.CloudNode;
+import com.hesso.cloud.lab3.exercice2.CloudProvider;
 import java.util.Set;
 import org.jclouds.compute.RunNodesException;
 
