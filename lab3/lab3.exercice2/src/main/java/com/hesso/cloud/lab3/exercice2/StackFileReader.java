@@ -31,6 +31,7 @@ public class StackFileReader {
             }
         }
 
+        provider.setNetworkID((String) config.get("net_id"));
         String mongoImageId = ((Map<String, String>) config.get("mongodb")).get("image_id");
         String restClientImageId = ((Map<String, String>) config.get("rest_client")).get("image_id");
         String restServerImageId = ((Map<String, String>) config.get("rest_server")).get("image_id");

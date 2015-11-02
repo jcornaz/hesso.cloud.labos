@@ -2,7 +2,7 @@ package com.hesso.cloud.lab3.exercice2;
 
 import com.hesso.cloud.lab3.exercice2.amazon.AmazonProvider;
 import com.hesso.cloud.lab3.exercice2.model.Stack;
-import com.hesso.cloud.lab3.exercice2.switchengine.SwitchEngineProvider;
+import com.hesso.cloud.lab3.exercice2.switchengine.SwitchEnginesProvider;
 import java.io.IOException;
 import org.jclouds.compute.RunNodesException;
 
@@ -18,7 +18,7 @@ public class RunInstances {
         if (provider.equalsIgnoreCase("switch")) {
             stack = StackFileReader.load("../amazon-stack.yml", new AmazonProvider(identity, key));
         } else if (provider.equalsIgnoreCase("amazon")) {
-            stack = StackFileReader.load("../switch-engine-stack.yml", new SwitchEngineProvider(identity, key));
+            stack = StackFileReader.load("../switch-engine-stack.yml", new SwitchEnginesProvider(identity, key));
         } else {
             System.err.println("not supported provider : " + provider);
         }

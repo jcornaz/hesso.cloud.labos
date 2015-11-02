@@ -8,5 +8,7 @@ public interface CloudProvider {
     public CloudNode createNode(String imageID, String name) throws RunNodesException;
 
     public Iterable<? extends Image> listImages();
+
+    public void setNetworkID(String string);
     
 }
