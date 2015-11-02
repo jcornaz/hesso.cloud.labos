@@ -13,6 +13,7 @@ import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.OsFamily;
 import org.jclouds.compute.domain.Template;
 import org.jclouds.compute.domain.TemplateBuilder;
+import org.jclouds.openstack.nova.v2_0.NovaApi;
 import org.jclouds.openstack.nova.v2_0.features.ServerApi;
 
 public class SwitchEnginesProvider implements CloudProvider {
@@ -20,6 +21,8 @@ public class SwitchEnginesProvider implements CloudProvider {
     private final String region;
     private final ComputeService client;
     private final TemplateBuilder templateBuilder;
+    private final NovaApi api;
+    
     private String netID;
 
     public SwitchEnginesProvider(String identity, String key) {
@@ -32,12 +35,16 @@ public class SwitchEnginesProvider implements CloudProvider {
                 .buildView(ComputeServiceContext.class)
                 .getComputeService();
 
+        this.api = ContextBuilder.newBuilder("openstack-nova")
+                .endpoint("https://keystone.cloud.switch.ch:5000/v2.0/tokens")
+                .credentials(String.format("%s:%s", identity, identity), key)
+                .buildApi(NovaApi.class);
+        
         System.out.println("Create a template builder for SwitchEngines ...");
         this.templateBuilder = client.templateBuilder()
                 .osFamily(OsFamily.UBUNTU)
                 .hardwareId("c1.micro")
-                .locationId(this.region)
-                .options(AWSEC2TemplateOptions.Builder.keyPair("id_hesso_amazonws").inboundPorts(22, 80));
+                .locationId(this.region);
     }
 
     @Override
@@ -45,7 +52,7 @@ public class SwitchEnginesProvider implements CloudProvider {
         Template template = this.templateBuilder.imageId(imageID).build();
         template.getOptions().networks(this.netID);
         NodeMetadata node = this.client.createNodesInGroup(name, 1, template).iterator().next();
-        return new SwitchEnginesNode(this.client, node);
+        return new SwitchEnginesNode(this.client, this.api, node, this.region);
     }
 
     @Override

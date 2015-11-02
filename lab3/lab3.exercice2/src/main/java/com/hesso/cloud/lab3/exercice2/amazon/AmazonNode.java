@@ -9,12 +9,10 @@ import org.jclouds.ec2.features.ElasticIPAddressApi;
 public class AmazonNode extends AbstractNode{
     
     private final AWSEC2Api api;
-    private final String region;
     private final ElasticIPAddressApi eipApi;
 
-    AmazonNode(ComputeService client, AWSEC2Api api, String region, NodeMetadata node) {
-        super(client, node);
-        this.region = region;
+    AmazonNode(ComputeService client, AWSEC2Api api, NodeMetadata node, String region) {
+        super(client, node, region);
         this.api = api;
         this.eipApi = this.api.getElasticIPAddressApi().get();
     }

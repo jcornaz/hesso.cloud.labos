@@ -15,9 +15,9 @@ public class RunInstances {
         String key = args[2];
 
         Stack stack = null;
-        if (provider.equalsIgnoreCase("switch")) {
+        if (provider.equalsIgnoreCase("amazon")) {
             stack = StackFileReader.load("../amazon-stack.yml", new AmazonProvider(identity, key));
-        } else if (provider.equalsIgnoreCase("amazon")) {
+        } else if (provider.equalsIgnoreCase("switch")) {
             stack = StackFileReader.load("../switch-engine-stack.yml", new SwitchEnginesProvider(identity, key));
         } else {
             System.err.println("not supported provider : " + provider);

@@ -15,12 +15,14 @@ import org.jclouds.compute.domain.NodeMetadata;
  */
 public abstract class AbstractNode implements CloudNode {
 
-    protected ComputeService client;
-    protected NodeMetadata node;
+    protected final ComputeService client;
+    protected final NodeMetadata node;
+    protected final String region;
 
-    protected AbstractNode(ComputeService client, NodeMetadata node) {
+    protected AbstractNode(ComputeService client, NodeMetadata node, String region) {
         this.client = client;
         this.node = node;
+        this.region = region;
     }
 
     @Override

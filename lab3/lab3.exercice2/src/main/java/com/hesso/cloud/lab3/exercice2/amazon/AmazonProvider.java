@@ -51,7 +51,7 @@ public class AmazonProvider implements CloudProvider {
         Template template = this.templateBuilder.imageId(this.region + "/" + imageID).build();
         template.getOptions().networks(this.netID);
         NodeMetadata node = this.client.createNodesInGroup(name, 1, template).iterator().next();
-        return new AmazonNode(this.client, this.api, this.region, node);
+        return new AmazonNode(this.client, this.api, node, this.region);
     }
 
     @Override
