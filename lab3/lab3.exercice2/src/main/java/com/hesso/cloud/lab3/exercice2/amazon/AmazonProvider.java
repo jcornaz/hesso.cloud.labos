@@ -2,6 +2,7 @@ package com.hesso.cloud.lab3.exercice2.amazon;
 
 import com.hesso.cloud.lab3.exercice2.CloudNode;
 import com.hesso.cloud.lab3.exercice2.CloudProvider;
+import java.util.Arrays;
 import java.util.Collection;
 import org.jclouds.ContextBuilder;
 import org.jclouds.aws.ec2.AWSEC2Api;
@@ -15,26 +16,29 @@ import org.jclouds.compute.domain.OsFamily;
 import org.jclouds.compute.domain.Template;
 import org.jclouds.compute.domain.TemplateBuilder;
 import org.jclouds.ec2.domain.InstanceType;
+import org.jclouds.sshj.config.SshjSshClientModule;
 
 public class AmazonProvider implements CloudProvider {
-    private ComputeService client;
-    private TemplateBuilder templateBuilder;
+
+    private final ComputeService client;
+    private final TemplateBuilder templateBuilder;
     private final AWSEC2Api api;
     private final String region;
     private String netID;
 
-
     public AmazonProvider(String identity, String key) {
         this.region = "eu-central-1";
-        
+
         System.out.println("Accessing to the Amazon API...");
-        this.client = ContextBuilder.newBuilder("aws-ec2")
+        ContextBuilder contextBuilder = ContextBuilder.newBuilder("aws-ec2")
                 .credentials(identity, key)
+                .modules(Arrays.asList(new SshjSshClientModule()));
+
+        this.client = contextBuilder
                 .buildView(ComputeServiceContext.class)
                 .getComputeService();
-        
-        this.api = ContextBuilder.newBuilder("aws-ec2")
-                .credentials(identity, key)
+
+        this.api = contextBuilder
                 .buildApi(ComputeServiceContext.class)
                 .unwrapApi(AWSEC2Api.class);
 
