@@ -32,8 +32,6 @@ public class SwitchEnginesProvider implements CloudProvider {
     public SwitchEnginesProvider(String identity, String key) {
         this.region = "LS";
 
-        List<SLF4JLoggingModule> modules = Arrays.asList(new SLF4JLoggingModule());
-
         Properties overrides = new Properties();
         overrides.setProperty(KeystoneProperties.CREDENTIAL_TYPE, CredentialTypes.PASSWORD_CREDENTIALS);
         overrides.setProperty(Constants.PROPERTY_API_VERSION, "2");
@@ -44,10 +42,9 @@ public class SwitchEnginesProvider implements CloudProvider {
                 .endpoint("https://keystone.cloud.switch.ch:5000/v2.0/tokens")
                 .credentials(String.format("%s:%s", identity, identity), key)
                 .overrides(overrides)
-                .modules(modules);
+                .modules(Arrays.asList(new SLF4JLoggingModule()));
 
         this.client = contextBuilder
-                .credentials(String.format("%s:%s", identity, identity), key)
                 .buildView(ComputeServiceContext.class)
                 .getComputeService();
 
@@ -61,11 +58,6 @@ public class SwitchEnginesProvider implements CloudProvider {
 
     @Override
     public CloudNode createNode(String imageID, String name) throws RunNodesException {
-        System.out.println("print images");
-        for (Image image : this.client.listImages()) {
-            System.out.println(image.getId());
-        }
-        System.out.println("build template");
         Template template = this.templateBuilder.imageId(imageID).build();
         template.getOptions().networks(this.netID);
         NodeMetadata node = this.client.createNodesInGroup(name, 1, template).iterator().next();

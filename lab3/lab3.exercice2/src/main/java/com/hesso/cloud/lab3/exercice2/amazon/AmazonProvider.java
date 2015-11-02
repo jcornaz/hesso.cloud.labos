@@ -38,9 +38,7 @@ public class AmazonProvider implements CloudProvider {
                 .buildView(ComputeServiceContext.class)
                 .getComputeService();
 
-        this.api = contextBuilder
-                .buildApi(ComputeServiceContext.class)
-                .unwrapApi(AWSEC2Api.class);
+        this.api = contextBuilder.buildApi(AWSEC2Api.class);
 
         System.out.println("Create a template builder for amazon ...");
         this.templateBuilder = client.templateBuilder()
