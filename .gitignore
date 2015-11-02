@@ -21,3 +21,4 @@ openstack-rc-file.sh
 
 # Exceptions
 !.gitignore
+/lab3/lab3.exercice2/target/
