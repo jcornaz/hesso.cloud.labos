@@ -4,7 +4,7 @@
 
 \newcommand{\gae}{\brand{Google App Engine}}
 
-\title{PaaS - Google App Engine}
+\title{PaaS - \gae}
 \module{CLOUD}{Cloud Computing}
 \author{Jonathan Cornaz}
 
@@ -40,17 +40,45 @@
 			\label{ds_viewer_local}
 			\centering
 			\includegraphics[width=\textwidth]{screen_ds_viewer_local.png}
-			\caption{Résultat dans le Datastore viewer en local}
+			\caption{Résultat dans le \eng{datastore viewer} en local}
 		\end{figure}
 				
-		\begin{figure}
+		\begin{figure}[h]
 			\label{ds_viewer_cloud}
 			\centering
 			\includegraphics[width=\textwidth]{screen_ds_viewer_cloud.png}
-			\caption{Résultat dans le Datastore viewer du cloud}
+			\caption{Résultat dans le \eng{datastore viewer} du \eng{cloud}}
 		\end{figure}
 	
+	\subtitledsection[Exercice 3]{Tester les performances d'écriture du \eng{datastore}}
+		\subsection{Graphiques}
+			\begin{figure}[h]
+				\label{perf_dswrite}
+				\centering
+				\includegraphics[width=\textwidth]{screen_jmetter_dswrite.png}
+				\caption{Temps de réponse de requête impliquant des écritures dans le \eng{datastore}}
+			\end{figure}
+			
+			\begin{figure}[h]
+				\label{perf_helloworld}
+				\centering
+				\includegraphics[width=\textwidth]{screen_jmeter_helloworld.png}
+				\caption{Temps de réponse de requête sans implication du \eng{datastore}}
+			\end{figure}
+				
+		\subsection{Temps de réponses}
+			Les temps de réponses du \eng{servlet} qui utilise le \eng{datastore} sont en moyenne de l'ordre de la demi seconde. Alors que les temps de réponses du \eng{servlet} "Hello world" qui n'utilise pas le \code{datastore}, les temps de réponses sont presque tous en dessus des deux dixièmes de secondes.
+			
+		\subsection{Quotas utilisés}
+			\begin{figure}[h]
+				\label{quotas}
+				\centering
+				\includegraphics[width=\textwidth]{screen_quotas.png}
+				\caption{Quotas utilisés}
+			\end{figure}
+
 	\appendixsection
 		
 		\listoffigures
+		
 \end{document}
