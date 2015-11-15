@@ -23,6 +23,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 @SuppressWarnings("serial")
 public class DatastoreWrite extends HttpServlet {
 
+	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		response.setContentType("text/plain");
 
