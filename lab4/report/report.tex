@@ -12,7 +12,7 @@
 \begin{document}
 	
 	\section{Introduction}
-		Dans le but d'appréhender le développement et le déploiement d'application dans un \eng{cloud} de type "platform as a service", deux \eng{servlets} ont été créés et déployés sur \gae. Une fois déployé, des tests de performances ont été effectués afin d'observer les mécanismes d'\eng{auto-scaling} de \gae.
+		Dans le but d'appréhender le développement et le déploiement d'application dans un \eng{cloud} de type "platform as a service", deux \eng{servlets} ont été créés et déployés sur \gae. Une fois déployé, des tests de performances ont été effectués afin d'observer les mécanismes d'\eng{auto-scaling} de la plateforme.
 
 	\subtitledsection[Exercice 1]{Déploiement d'une simple application web}
 		L'exemple généré est un simple "Hello world". Il est constitué de trois fichiers clés : \code{index.html}, \code{web.xml} et \code{Lab04Servlet.java}.
@@ -21,7 +21,7 @@
 			A la racine de l'application apparaît un fichier \code{index.html} qui contient une redirection vers l'url "/Labo04".
 		
 		\subsection{Fichier web.xml}
-			Le fichier de description d'application web (\code{web.xml}) définit le fichier par défaut à utiliser si l'url ne contient pas de chemin spécifique (en l'occurence \code{index.hml}). Et il contient également le mappage de l'url "/Labo4" avec l'applet java \code{ch.hesso.mse.cloud.Lab04Servlet}.
+			Le fichier de description d'application web (\code{web.xml}) définit le fichier par défaut à utiliser si l'url ne contient pas de chemin spécifique (en l'occurence \code{index.hml}). Et il contient également le mappage de l'url "/Labo4" avec l'applet java \code{ch.hesso.mse.cloud.cornaz.Lab04Servlet}.
 		
 		\subsection{Fichier *.java}
 			Le servlet (\code{Lab04Servlet.java}) est une classe dérivée de \code{HttpServlet} qui implémente une méthode {doGet(HttpServletRequest, HttpServletResponse)}. En l'occurence l'implémentation consiste en la déclaration d'un contenu texte et de l'impression du message "Hello world".
@@ -78,9 +78,10 @@
 				\caption{Temps de réponse de requête impliquant des écritures dans le magasin de donnée}
 			\end{figure}
 			
-			On constate qu'il y a des sortes d'à-coups. Après la création d'une instance, le temps de réponse décroit progressivment, jusqu'à (semble-t-il) ce que la quantité de requête à gérée soit à nouveau trop importante et que \gae\ crée automatiquement une nouvelle instance. Ce processus est cyclique, mais on remarque qu'il se stabilise, lorsque le nombre d'instance semble suffisant pour absorber complètement le flux de requête.
+			On constate qu'il y a des sortes d'à-coups. Après la création d'une instance, le temps de réponse décroit progressivment, jusqu'à (semble-t-il) ce que la quantité de requête à gérée soit à nouveau trop importante et que \gae\ crée automatiquement une nouvelle instance. Ce processus est cyclique, mais on remarque qu'il se stabilise, lorsque le nombre d'instance semble suffisant pour absorber complètement le flux de requêtes.
 			
-			\begin{figure}[h]
+			\clearpage
+			\begin{figure}[!h]
 				\label{perf_helloworld}
 				\includegraphics[width=\textwidth]{screen_jmeter_helloworld.png}
 				\caption{Temps de réponse de requête sans implication du magasin de donnée}
@@ -93,13 +94,14 @@
 		\subsection{Temps de réponses}
 			Les temps de réponses du \eng{servlet} qui utilise le magasin de donnée sont en moyenne de l'ordre de la demi seconde. Alors que les temps de réponses du \eng{servlet} "Hello world" qui n'utilise pas le magasin de donnée, les temps de réponses sont presque tous en dessous des deux dixièmes de secondes.
 			
-			Cela s'explique simplement par le fait que les opérations en écriture on un coup en temps bien plus élevé puisqu'il faut faire intervenir le magasin de donnée et attendre que la transaction ait été complètement sauvegardée de manière cohérente et pérenne. Alors que le "Hello world" lui n'accède pas du tout au magasin de donnée, même pas en lecture. Il se contente d'afficher un message prédéfinit. Cette action peut être accomplie de manière beaucoup plus rapide, puisque le seul "frein" est simplement la rapidité de traitement de la requête.
-			
+			Cela s'explique par le fait que les opérations en écriture on un coup en temps bien plus élevé puisqu'il faut faire intervenir le magasin de donnée et attendre que la transaction ait été complètement sauvegardée de manière cohérente et pérenne. Alors que le "Hello world", quant à lui, n'accède pas du tout au magasin de donnée, même en lecture. Il se contente d'afficher un message prédéfinit. Cette action peut être accomplie de manière beaucoup plus rapide, puisque le seul "frein" est simplement la rapidité de traitement de la requête.
+		
+		\clearpage
 		\subsection{Quotas utilisés}
 			
 			Le quota le plus utilisé est celui des opérations d'écriture dans le magasin de donnée. Celui-ci ne permet que 50'000 opérations en écriture. Comme les test effectuaient chaque fois 5'000 enregistrement, il n'a suffit que de quelqu'uns d'entre eux pour remplir le quotas.
 			
-			\begin{table}
+			\begin{table}[!h]
 				\setlength\extrarowheight{3pt}
 				\caption{Quotas quotidiens utilisés}
 				\label{tab:quotas}
@@ -120,19 +122,33 @@
 				\end{tabularx}
 			\end{table}
 			
-			\begin{figure}[h]
+			\begin{figure}[!h]
 				\label{quotas}
 				\centering
 				\includegraphics[width=\textwidth]{screen_quotas.png}
 				\caption{Quotas utilisés}
 			\end{figure}
 			
+		\clearpage
+		\subsection{Suppositions de fonctionnement de \gae}
+			Bien que \brand{Google} ne donne pas beaucoup de détails quant au fonctionnement de l'\eng{auto-scaling}, on peut supposer qu'il se base (au moins) sur les valeurs suivantes :
+			
+			\begin{itemize}
+				\item Nombre de requête par seconde lors de la dernière minute
+				\item Latence moyenne lors de la dernière minute
+				\item Nombre d'instance en cours
+			\end{itemize}
+			
 	\section{Conclusion}
 		Le développement et le déploiement d'application avec \gae\ est facile à prendre en main. Tout est mis à disposition du développeur pour qu'il puisse se focaliser sur le développement de son application sans avoir à se soucier du maintien de la plateforme sur laquelle sont application doit être hébergée. L'\eng{auto-scaling} peut paraître un peu "mystique", puisque l'on a que très peu la possibilité de le gérer. Mais c'est une fonctionnalité très puissante, et une fois encore décharge le développeur d'avoir à se soucier de cet aspect pour son application.
+		
+		Cependant la nature de ce service peut potentiellement poser problème si l'application déployée subit une attaque de type "Deny of services". Si, \brand{Google} a pris des mesures pour réduire au maximum l'impact de ce genre d'attaque, les quotas vont tous de même être épuisé très rapidement ce qui peut au final quand même occasionner des coûts supplémentaires au propriétaire de l'application, s'il veut maintenir sa disponibilité pour les utilisateurs.
 
 	\appendixsection
 		
 		\listoffigures
+		
+		\listoftables
 		
 		\subsection{Donnée}
 			\url{http://mse-cloud.s3-website-eu-west-1.amazonaws.com/labs/paas.html}

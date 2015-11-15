@@ -126,5 +126,12 @@
 	\@starttoc{lof}%
 }
 
+\renewcommand\listoftables{%
+	\subsection{\listtablename}%
+	\@mkboth{\MakeUppercase\listtablename}%
+	{\MakeUppercase\listtablename}%
+	\@starttoc{lot}%
+}
+
 \let\EndItemize\enditemize
 \def\enditemize{\EndItemize\bigskip}
