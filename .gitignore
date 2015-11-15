@@ -5,6 +5,9 @@
 *.gz
 *.log
 
+# Common folders
+lib/
+
 # Maven folder
 target/
 
