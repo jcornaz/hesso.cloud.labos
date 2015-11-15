@@ -1,4 +1,4 @@
-package ch.hesso.mse.cloud;
+package ch.hesso.mse.cloud.cornaz;
 
 import java.io.IOException;
 import java.util.Enumeration;
