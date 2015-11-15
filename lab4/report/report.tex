@@ -13,4 +13,16 @@
 	\section{Introduction}
 		% TODO
 
+	\subtitledsection[Exercice1]{Déploiement d'une simple application web}
+		L'exemple généré est un simple "Hello world". Il est constitué de trois fichiers clés : \code{index.html}, \code{web.xml} et \code{Lab04Servlet.java}.
+		
+		\subsection{Fichier index.html}
+			A la racine de l'application apparaît un fichier \code{index.html} qui contient une redirection vers l'url "/Labo04".
+		
+		\subsection{Fichier web.xml}
+			Le fichier de description d'application web (\code{web.xml}) résoud l'url "/Labo4" pour démarrer l'applet java en fonction de son nom de classe (en l'occurence "ch.hesso.mse.cloud.Lab04Servlet")
+		
+		\subsection{Fichier *.java}
+			Le servlet (\code{Lab04Servlet.java}) est une classe dérivée de \code{HttpServlet} et implémente une méthode {doGet(HttpServletRequest, HttpServletResponse)}. En l'occurence l'implémentation consiste en la déclaration d'un contenu text et de l'impression du message "Hello world".
+			
 \end{document}
