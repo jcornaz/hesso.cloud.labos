@@ -1,6 +1,11 @@
 # HES-SO CLOUD
 There is the unevaluated laboratories for the CLOUD lessons of the HES-SO school (Switzerland).
 
-The statements of the laboratories are available here : http://mse-cloud.s3-website-eu-west-1.amazonaws.com/labs.html.
+## Status
+This was a school project. It is no longer maintained and no support will ever be provided.
 
-The code is not usable as long as there is no credentials files for the cloud providers.
+The project is available to anyone interested by studying, modifing or using it. However, be aware that it might contains bugs or errors, and some resources might be missing (data or credentials).
+
+Please note that the language and technologies might have been new for the contributors when developping the project. Time frame and project requirement are also very different than most *real-world* project. 
+
+**Coding style is not representative of current style of the contributors**
